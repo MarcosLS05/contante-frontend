@@ -8,6 +8,7 @@ import { debounceTime, Subject } from 'rxjs';
 import { Router, RouterModule } from '@angular/router';
 import { TrimPipe } from '../../../pipe/trim.pipe';
 import { PeriodoService } from '../../../service/periodo.service';
+import { HttpDownloadProgressEvent, HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   standalone: true,
@@ -16,7 +17,7 @@ import { PeriodoService } from '../../../service/periodo.service';
   styleUrls: ['./periodo.admin.plist.routed.component.css'],
   imports: [CommonModule, FormsModule, TrimPipe, RouterModule],
 })
-export class  PeriodoAdminPlistRoutedComponent implements OnInit {
+export class PeriodoAdminPlistRoutedComponent implements OnInit {
 
   oPage: IPage<IPeriodo> | null = null;
   //
@@ -36,13 +37,13 @@ export class  PeriodoAdminPlistRoutedComponent implements OnInit {
     private oPeriodoService: PeriodoService,
     private oBotoneraService: BotoneraService,
     private oRouter: Router
-  ) { 
+  ) {
     this.debounceSubject.pipe(debounceTime(10)).subscribe((value) => {
       this.getPage();
     });
   }
 
- 
+
   ngOnInit() {
     this.getPage();
   }
@@ -76,6 +77,18 @@ export class  PeriodoAdminPlistRoutedComponent implements OnInit {
 
   remove(oPeriodo: IPeriodo) {
     this.oRouter.navigate(['admin/periodo/delete/', oPeriodo.id]);
+  }
+
+  flip(oPeriodo: IPeriodo) {
+    this.oPeriodoService.flip(oPeriodo).subscribe({
+      next: (oPeriodoFromServer: IPeriodo) => {
+        this.getPage();
+      },
+      error: (err: HttpErrorResponse) => {
+        console.log(err);
+      },
+    });
+
   }
 
   goToPage(p: number) {
@@ -114,5 +127,7 @@ export class  PeriodoAdminPlistRoutedComponent implements OnInit {
   filter(event: KeyboardEvent) {
     this.debounceSubject.next(this.strFiltro);
   }
+
+
 
 }

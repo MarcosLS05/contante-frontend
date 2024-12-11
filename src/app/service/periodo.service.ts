@@ -11,7 +11,7 @@ import { Observable } from 'rxjs/internal/Observable';
 export class PeriodoService {
   serverURL: string = serverURL + '/periodo';
 
-  constructor(private oHttp: HttpClient) {}
+  constructor(private oHttp: HttpClient) { }
 
   getPage(
     page: number,
@@ -42,7 +42,7 @@ export class PeriodoService {
       URL += '&filter=' + filtro;
     }
     return this.oHttp.get<IPage<IPeriodo>>(URL, httpOptions);
-    
+
   }
 
   get(id: number): Observable<IPeriodo> {
@@ -55,7 +55,7 @@ export class PeriodoService {
   create(oPeriodo: IPeriodo): Observable<IPeriodo> {
     let URL: string = '';
     URL += this.serverURL;
-    return this.oHttp.put<IPeriodo>(URL, oPeriodo);
+    return this.oHttp.post<IPeriodo>(URL, oPeriodo);
   }
 
   update(oPeriodo: IPeriodo): Observable<IPeriodo> {
@@ -64,16 +64,22 @@ export class PeriodoService {
     return this.oHttp.put<IPeriodo>(URL, oPeriodo);
   }
 
-  getOne (id: number): Observable<IPeriodo> {
+  getOne(id: number): Observable<IPeriodo> {
     let URL: string = '';
-    URL += 'http://localhost:8085';
-    URL += '/periodo';
+    URL += this.serverURL;
     URL += '/' + id;
     return this.oHttp.get<IPeriodo>(URL);
   }
 
   delete(id: number) {
-    return this.oHttp.delete('http://localhost:8085/periodo/' + id);
+    return this.oHttp.delete(this.serverURL + "/" + id);
+  }
+
+  flip(oPeriodo: IPeriodo): Observable<IPeriodo> {
+    let URL: string = '';
+    URL += this.serverURL;
+    URL += '/flip';
+    return this.oHttp.put<IPeriodo>(URL + "/" + oPeriodo.id, oPeriodo);
   }
 
 }
