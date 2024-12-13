@@ -179,15 +179,16 @@ export class ApunteService {
     return this.oHttp.post<IApunte>(URL, oApunte);
   }
 
-  getOne(id: number): Observable<IApunte> {
-    let URL: string = '';
-    URL += 'http://localhost:8085';
-    URL += '/apunte';
-    URL += '/' + id;
-    return this.oHttp.get<IApunte>(URL);
+  getOne(id: number): Observable<IApunte> {    
+    return this.oHttp.get<IApunte>(this.serverURL + '/' + id);
   }
 
   delete(id: number) {
-    return this.oHttp.delete('http://localhost:8085/apunte/' + id);
+    return this.oHttp.delete(this.serverURL + "/" + id);
   }
+
+  setTipoapunte(id: number, id_tipoapunte: number): Observable<IApunte> {
+    return this.oHttp.put<IApunte>(this.serverURL + '/settipoapunte/' + id + '/' + id_tipoapunte, null);
+  }
+
 }

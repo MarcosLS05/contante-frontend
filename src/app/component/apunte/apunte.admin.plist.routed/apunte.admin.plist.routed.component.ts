@@ -10,6 +10,7 @@ import { IApunte } from '../../../model/apunte.interface';
 import { ApunteService } from '../../../service/apunte.service';
 import { MatDialog } from '@angular/material/dialog';
 import { TipoApunteAdminSelectorUnroutedComponent } from '../../tipoapunte/tipoapunte.admin.selector.unrouted/tipoapunte.admin.selector.unrouted.component';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-apunte.admin.routed',
@@ -127,33 +128,48 @@ export class ApunteAdminPlistRoutedComponent implements OnInit {
   }
 
 
-  showTipocuentaSelectorModal() {
-    const dialogRef = this.dialog.open(TipoApunteAdminSelectorUnroutedComponent, {
-      height: '800px',
-      maxHeight: '1200px',
-      width: '80%',
-      maxWidth: '90%',
+  showTipocuentaSelectorModal(id: number | undefined) {
+    if (id) {
+      const dialogRef = this.dialog.open(TipoApunteAdminSelectorUnroutedComponent, {
+        height: '800px',
+        maxHeight: '1200px',
+        width: '80%',
+        maxWidth: '90%',
 
-    });
+      });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      if (result !== undefined) {
-        console.log(result);  
+      dialogRef.afterClosed().subscribe(result => {
+        console.log('The dialog was closed');
+        if (result !== undefined) {
+          console.log(result);
 
+          /*   ----> ejercicio
+          // sustituir el tipo de apunte en el id de apunte seleccionado en oPage.content        
+          this.oPage?.content.forEach((apunte) => {
+            if (apunte.id === id) {
+              apunte.tipoapunte = result;
+            }
+          });
+          */
 
+          // llamada al servidor
+          this.oApunteService.setTipoapunte(id, result.id).subscribe({
+            next: (response: IApunte) => {
+              console.log(response);
+              this.getPage();
+            },
+            error: (err: HttpErrorResponse) => {
+              console.log(err);
+            },
+          });
 
-        
-        //
-        // aqui hay q e hacer la llamada al servidor para que cambie el tipo de apunte en el apunte
-        // 
+        }
+      });
+      return false;
+    } else {
+      return false;
+    }
 
-
-
-
-      }
-    });
-    return false;
   }
 
 
