@@ -3,13 +3,10 @@
     <div class="col text-center">
       <h2 class="my-2">
         <i class="bi bi-list"></i>
-        Lista de Apuntes
-        <i class="bi bi-newspaper"></i>
+        Selección de Tipo de Apuntes
+        <i class="bi bi-file-text"></i>
       </h2>
-      <a href="admin/apunte/create"><button class="btn btn-primary my-2 mx-2">
-          <i class="bi bi-plus-square"></i>
-          Crear nuevo apunte
-        </button></a>
+
 
       <div class="d-inline-flex mx-2">
         <input type="text" class="form-control" placeholder="Buscar" (keyup)="filter($event)" [(ngModel)]="strFiltro" />
@@ -83,18 +80,6 @@
                 } @else {
                 <i class="bi bi-caret-up-fill"></i>} }
               </th>
-              <th (click)="sort('debe')" class="bg-primary text-white">
-                Debe @if (strField === 'debe') { @if (strDir === 'desc') {
-                <i class="bi bi-caret-down-fill"></i>
-                } @else {
-                <i class="bi bi-caret-up-fill"></i>} }
-              </th>
-              <th (click)="sort('haber')" class="bg-primary text-white">
-                Haber @if (strField === 'haber') { @if (strDir === 'desc') {
-                <i class="bi bi-caret-down-fill"></i>
-                } @else {
-                <i class="bi bi-caret-up-fill"></i>} }
-              </th>
               <th (click)="sort('descripcion')" class="bg-primary text-white">
                 Descripción @if (strField === 'descripcion') { @if (strDir ===
                 'desc') {
@@ -109,74 +94,47 @@
                 } @else {
                 <i class="bi bi-caret-up-fill"></i>} }
               </th>
-              <th (click)="sort('momentstamp')" class="bg-primary text-white">
-                Momentstamp @if (strField === 'momentstamp') { @if (strDir ===
-                'desc') {
-                <i class="bi bi-caret-down-fill"></i>
-                } @else {
-                <i class="bi bi-caret-up-fill"></i>} }
-              </th>
-              <th (click)="sort('orden')" class="bg-primary text-white">
-                Orden @if (strField === 'orden') { @if (strDir === 'desc') {
-                <i class="bi bi-caret-down-fill"></i>
-                } @else {
-                <i class="bi bi-caret-up-fill"></i>} }
-              </th>
-              <th class="bg-primary text-white">Asiento</th>
-              <th class="bg-primary text-white">Subcuenta</th>
-              <th class="bg-primary text-white">Tipo de Apunte</th>
 
+              <th class="bg-primary text-white">Apuntes</th>
+              <th class="bg-primary text-white">Balances</th>
               <th class="bg-warning text-black">Acciones</th>
             </tr>
           </thead>
 
           <tbody>
-            @for (apunte of oPage?.content; track apunte.id) {
+            @for (tipoapunte of oPage?.content; track tipoapunte.id) {
             <tr>
-              <td class="text-center">{{ apunte.id }}</td>
-              <td class="text-end">{{ apunte.debe }}</td>
-              <td class="text-end">{{ apunte.haber }}</td>
-              <td class="text-start">{{ apunte.descripcion | trim : 10 }}</td>
-              <td class="text-start">{{ apunte.comentarios | trim : 10 }}</td>
+              <td class="text-center">{{ tipoapunte.id }}</td>
               <td class="text-start">
-                {{ apunte.momentstamp | date : "dd/MM/yyyy ..." }}
-              </td>
-              <td class="text-center">{{ apunte.orden }}</td>
-              <td class="text-start">
-                <a [routerLink]="['/admin/asiento/view', apunte.asiento.id]">
-                  {{ apunte.asiento.descripcion | trim :10 }}({{ apunte.asiento.id }})
-                </a>
+                {{ tipoapunte.descripcion | trim : 30 }}
               </td>
               <td class="text-start">
-                <a [routerLink]="['/admin/subcuenta/view', apunte.subcuenta.id]">
-                  {{ apunte.subcuenta.descripcion | trim :10 }}({{ apunte.subcuenta.id }})
-                </a>
+                {{ tipoapunte.comentarios | trim : 10 }}
               </td>
-              <td class="text-start">
-                <a [routerLink]="['/admin/tipoapunte/view', apunte.tipoapunte.id]">
-                  {{ apunte.tipoapunte.descripcion }}({{ apunte.tipoapunte.id }})
-                </a>
+              <td class="text-center">
+                
+                  {{ tipoapunte.apuntes }}
+                
+              </td>
 
-                <i class="bi bi-arrow-up-circle" (click)="showTipocuentaSelectorModal()"></i>
 
+
+              <td class="text-center">
+                
+                  {{ tipoapunte.grupotipoapuntes }}
+                
               </td>
               <td>
                 <div class="btn-group" role="group" aria-label="Basic example">
-                  <button type="button" class="btn btn-success" (click)="view(apunte)">
-                    <i class="bi bi-eye icon-15"></i>
-                  </button>
-                  <button type="button" class="btn btn-warning icon-15" (click)="edit(apunte)">
-                    <i class="bi bi-pen"></i>
-                  </button>
-                  <button type="button" class="btn btn-danger icon-15" (click)="remove(apunte)">
-                    <i class="bi bi-trash"></i>
+                  <button type="button" class="btn btn-success" (click)="select(tipoapunte)">
+                    <i class="bi bi-eyedropper"></i>
                   </button>
                 </div>
               </td>
             </tr>
             } @empty {
             <tr>
-              <td colspan="11">No hay apuntes</td>
+              <td>No hay tipos de apunte</td>
             </tr>
             }
           </tbody>

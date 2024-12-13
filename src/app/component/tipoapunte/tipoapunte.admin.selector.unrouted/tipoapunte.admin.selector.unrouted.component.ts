@@ -6,20 +6,19 @@ import { BotoneraService } from '../../../service/botonera.service';
 import { debounceTime, Subject } from 'rxjs';
 import { Router, RouterModule } from '@angular/router';
 import { TrimPipe } from '../../../pipe/trim.pipe';
-import { IApunte } from '../../../model/apunte.interface';
-import { ApunteService } from '../../../service/apunte.service';
-import { MatDialog } from '@angular/material/dialog';
-import { TipoApunteAdminSelectorUnroutedComponent } from '../../tipoapunte/tipoapunte.admin.selector.unrouted/tipoapunte.admin.selector.unrouted.component';
+import { ITipoapunte } from '../../../model/tipoapunte.interface';
+import { TipoApunteService } from '../../../service/tipoapunte.service';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-apunte.admin.routed',
-  templateUrl: './apunte.admin.plist.routed.component.html',
-  styleUrls: ['./apunte.admin.plist.routed.component.css'],
+  selector: 'app-tipoapunte-admin-selector-unrouted',
+  templateUrl: './tipoapunte.admin.selector.unrouted.component.html',
+  styleUrls: ['./tipoapunte.admin.selector.unrouted.component.css'],
   standalone: true,
   imports: [CommonModule, FormsModule, TrimPipe, RouterModule],
 })
-export class ApunteAdminPlistRoutedComponent implements OnInit {
-  oPage: IPage<IApunte> | null = null;
+export class TipoApunteAdminSelectorUnroutedComponent implements OnInit {
+  oPage: IPage<ITipoapunte> | null = null;
   //
   nPage: number = 0; // 0-based server count
   nRpp: number = 10;
@@ -32,13 +31,14 @@ export class ApunteAdminPlistRoutedComponent implements OnInit {
   arrBotonera: string[] = [];
   //
   private debounceSubject = new Subject<string>();
-  readonly dialog = inject(MatDialog);
 
-  constructor(
-    private oApunteService: ApunteService,
+  readonly dialogRef = inject(MatDialogRef<TipoApunteAdminSelectorUnroutedComponent>);
+
+  constructor( 
+    private oTipoApunteService: TipoApunteService,
     private oBotoneraService: BotoneraService,
     private oRouter: Router
-  ) {
+  ) { 
     this.debounceSubject.pipe(debounceTime(10)).subscribe((value) => {
       this.getPage();
     });
@@ -49,7 +49,7 @@ export class ApunteAdminPlistRoutedComponent implements OnInit {
   }
 
   getPage() {
-    this.oApunteService
+    this.oTipoApunteService
       .getPage(
         this.nPage,
         this.nRpp,
@@ -58,7 +58,7 @@ export class ApunteAdminPlistRoutedComponent implements OnInit {
         this.strFiltro
       )
       .subscribe({
-        next: (oPageFromServer: IPage<IApunte>) => {
+        next: (oPageFromServer: IPage<ITipoapunte>) => {
           this.oPage = oPageFromServer;
           this.arrBotonera = this.oBotoneraService.getBotonera(
             this.nPage,
@@ -71,22 +71,18 @@ export class ApunteAdminPlistRoutedComponent implements OnInit {
       });
   }
 
-  edit(oApunte: IApunte) {
+  edit(oTipoApunte: ITipoapunte) {
     //navegar a la página de edición
-    this.oRouter.navigate(['admin/apunte/edit', oApunte.id]);
+    this.oRouter.navigate(['admin/tipoapunte/edit', oTipoApunte.id]);
   }
 
-  view(oApunte: IApunte) {
+  view(oTipoApunte: ITipoapunte) {
     //navegar a la página de edición
-    this.oRouter.navigate(['admin/apunte/view', oApunte.id]);
+    this.oRouter.navigate(['admin/tipoapunte/view', oTipoApunte.id]);
   }
 
-  remove(oApunte: IApunte) {
-    this.oRouter.navigate(['admin/apunte/delete/', oApunte.id]);
-  }
-
-  openModal(oApunte: IApunte) {
-
+  remove(oTipoApunte: ITipoapunte) {
+    this.oRouter.navigate(['admin/tipoapunte/delete/', oTipoApunte.id]);
   }
 
   goToPage(p: number) {
@@ -126,35 +122,13 @@ export class ApunteAdminPlistRoutedComponent implements OnInit {
     this.debounceSubject.next(this.strFiltro);
   }
 
+  select(oTipoapunte: ITipoapunte) {
+    
+    // estamos en ventana emergente: no navegar
+    // emitir el objeto seleccionado
 
-  showTipocuentaSelectorModal() {
-    const dialogRef = this.dialog.open(TipoApunteAdminSelectorUnroutedComponent, {
-      height: '800px',
-      maxHeight: '1200px',
-      width: '80%',
-      maxWidth: '90%',
-
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      if (result !== undefined) {
-        console.log(result);  
+    this.dialogRef.close(oTipoapunte);
 
 
-
-        
-        //
-        // aqui hay q e hacer la llamada al servidor para que cambie el tipo de apunte en el apunte
-        // 
-
-
-
-
-      }
-    });
-    return false;
-  }
-
-
+}
 }
