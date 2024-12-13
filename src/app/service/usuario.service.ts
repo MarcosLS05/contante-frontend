@@ -11,7 +11,7 @@ import { httpOptions, serverURL } from '../environment/environment';
 export class UsuarioService {
   serverURL: string = serverURL + '/usuario';
 
-  constructor(private oHttp: HttpClient) {}
+  constructor(private oHttp: HttpClient) { }
 
   getPage(
     page: number,
@@ -74,4 +74,15 @@ export class UsuarioService {
   delete(id: number) {
     return this.oHttp.delete('http://localhost:8085/usuario/' + id);
   }
+
+  getApuntes(id: number): Observable<number> {
+    return this.oHttp.get<number>(this.serverURL + "/apuntes/" + id);
+  }
+
+  getApuntesAbiertos(id: number): Observable<number> {
+    return this.oHttp.get<number>(this.serverURL + "/apuntesabiertos/" + id);
+  }
+  
+
+
 }
