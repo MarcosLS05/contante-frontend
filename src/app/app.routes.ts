@@ -15,7 +15,7 @@ import { ApunteAdminViewRoutedComponent } from './component/apunte/apunte.admin.
 import { ApunteAdminCreateRoutedComponent } from './component/apunte/apunte.admin.create.routed/apunte.admin.create.routed.component';
 import { ApunteXAsientoAdminPlistRoutedComponent } from './component/apunte/apunte.xasiento.admin.plist.routed/apunte.xasiento.admin.plist.routed.component';
 import { ApunteXSubcuentaAdminPlistRoutedComponent } from './component/apunte/apunte.xsubcuenta.admin.plist.routed/apunte.xsubcuenta.admin.plist.routed.component';
-import { ApunteXTipoapunteAdminPlistRoutedComponent } from './component/apunte/apunte.xtipoapunte.admin.plist.routed /apunte.xtipoapunte.admin.plist.routed.component';
+import { ApunteXTipoapunteAdminPlistRoutedComponent } from './component/apunte/apunte.xtipoapunte.admin.plist.routed/apunte.xtipoapunte.admin.plist.routed.component';
 
 import { TipocuentaAdminEditRoutedComponent } from './component/tipocuenta/tipocuenta.admin.edit.routed/tipocuenta.admin.edit.routed.component';
 import { TipoCuentaAdminViewRoutedComponent } from './component/tipocuenta/tipocuenta.admin.view.routed/tipoCuenta.admin.view.routed.component';
@@ -56,7 +56,7 @@ import { BalanceAdminViewRoutedComponent } from './component/balance/balance.adm
 import { BalanceAdminEditRoutedComponent } from './component/balance/balance.admin.edit.routed/balance.admin.edit.routed.component';
 import { BalanceAdminPlistRoutedComponent } from './component/balance/balance.admin.plist.routed/balance.admin.plist.routed.component';
 import { BalanceXTipoapunteAdminPlistRoutedComponent } from './component/balance/balance.xtipoapunte.admin.plist.routed/balance.xtipoapunte.admin.plist.routed.component';
-import { BalanceXSubcuentaAdminPlistRoutedComponent } from './component/balance/balance.xsubcuenta.admin.plist.routed /balance.xsubcuenta.admin.plist.routed.component';
+import { BalanceXSubcuentaAdminPlistRoutedComponent } from './component/balance/balance.xsubcuenta.admin.plist.routed/balance.xsubcuenta.admin.plist.routed.component';
 import { BalanceXTipocuentaAdminPlistRoutedComponent } from './component/balance/balance.xtipocuenta.admin.plist.routed/balance.xtipocuenta.admin.plist.routed.component';
 import { BalanceXTipoasientoAdminPlistRoutedComponent } from './component/balance/balance.xtipoasiento.admin.plist.routed/balance.xtipoasiento.admin.plist.routed.component';
 
@@ -72,6 +72,8 @@ import { PeriodoAdminDeleteRoutedComponent } from './component/periodo/periodo.a
 import { PeriodoAdminEditRoutedComponent } from './component/periodo/periodo.admin.edit.routed/periodo.admin.edit.routed.component';
 import { PeriodoAdminPlistRoutedComponent } from './component/periodo/periodo.admin.plist.routed/periodo.admin.plist.routed.component';
 import { PeriodoAdminViewRoutedComponent } from './component/periodo/periodo.admin.view.routed/periodo.admin.view.routed.component';
+import { TipocuentaXBalanceAdminPlistRoutedComponent } from './component/tipocuenta/tipocuenta.xbalance.admin.plist.routed/tipocuenta.xbalance.admin.plist.routed.component';
+import { TipoasientoXbalanceAdminPlistRoutedComponent } from './component/tipoasiento/tipoasiento.xbalance.admin.plist.routed/tipoasiento.xbalance.admin.plist.routed';
 
 export const routes: Routes = [
   { path: '', component: SharedHomeRoutedComponent },
@@ -134,6 +136,7 @@ export const routes: Routes = [
   { path: 'admin/tipoAsiento/view/:id', component: TipoasientoAdminViewRoutedComponent },
   { path: 'admin/tipoAsiento/create', component: TipoasientoAdminCreateRoutedComponent, pathMatch: 'full' },
   { path: 'admin/tipoAsiento/delete/:id', component: TipoasientoAdminDeleteRoutedComponent },
+  { path: 'admin/tipoAsiento/plist/xbalance/:id', component: TipoasientoXbalanceAdminPlistRoutedComponent},
 
   { path: 'admin/tipoapunte/plist', component: TipoApunteAdminPlistRoutedComponent },
   { path: 'admin/tipoapunte/edit/:id', component: TipoApunteAdminEditRoutedComponent },
@@ -152,6 +155,8 @@ export const routes: Routes = [
   { path: 'admin/tipoCuenta/edit/:id', component: TipocuentaAdminEditRoutedComponent },
   { path: 'admin/tipoCuenta/plist', component: TipocuentaAdminPlistRoutedComponent },
   { path: 'admin/tipoCuenta/view/:id', component: TipoCuentaAdminViewRoutedComponent },
+  { path: 'admin/tipoCuenta/plist/xbalance/:id', component: TipocuentaXBalanceAdminPlistRoutedComponent },
+
 
 
 

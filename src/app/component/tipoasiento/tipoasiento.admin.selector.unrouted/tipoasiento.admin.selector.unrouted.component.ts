@@ -6,20 +6,19 @@ import { BotoneraService } from '../../../service/botonera.service';
 import { debounceTime, Subject } from 'rxjs';
 import { Router, RouterModule } from '@angular/router';
 import { TrimPipe } from '../../../pipe/trim.pipe';
-import { ITipocuenta } from '../../../model/tipocuenta.interface';
-import { TipoCuentaService } from '../../../service/tipoCuenta.service';
+import { ITipoasiento } from '../../../model/tipoasiento.interface';
+import { TipoAsientoService } from '../../../service/tipoAsiento.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-tipocuenta-admin-selector-unrouted',
-  templateUrl: './tipocuenta.admin.selector.unrouted.component.html',
-  styleUrls: ['./tipocuenta.admin.selector.unrouted.component.css'],
+  selector: 'app-tipoasiento-admin-selector-unrouted',
+  templateUrl: './tipoasiento.admin.selector.unrouted.component.html',
+  styleUrls: ['./tipoasiento.admin.selector.unrouted.component.css'],
   standalone: true,
   imports: [CommonModule, FormsModule, TrimPipe, RouterModule],
 })
-
-export class TipocuentaAdminSelectorUnroutedComponent implements OnInit {
-  oPage: IPage<ITipocuenta> | null = null;
+export class TipoasientoAdminSelectorUnroutedComponent implements OnInit {
+  oPage: IPage<ITipoasiento> | null = null;
   //
   nPage: number = 0; // 0-based server count
   nRpp: number = 10;
@@ -33,11 +32,13 @@ export class TipocuentaAdminSelectorUnroutedComponent implements OnInit {
   //
   private debounceSubject = new Subject<string>();
   //
-  readonly dialogRef = inject(MatDialogRef<TipocuentaAdminSelectorUnroutedComponent>);
+  readonly dialogRef = inject(
+    MatDialogRef<TipoasientoAdminSelectorUnroutedComponent>
+  );
   readonly data = inject(MAT_DIALOG_DATA);
 
   constructor(
-    private oTipoCuentaService: TipoCuentaService,
+    private oTipoAsientoService: TipoAsientoService,
     private oBotoneraService: BotoneraService,
     private oRouter: Router
   ) {
@@ -51,25 +52,7 @@ export class TipocuentaAdminSelectorUnroutedComponent implements OnInit {
   }
 
   getPage() {
-    if (this.data.origen == "xbalance"){
-      this.oTipoCuentaService.getPageXBalanceNoTiene(
-        this.nPage,
-        this.nRpp,
-        this.data.idBalance
-      ).subscribe({
-        next: (oPageFromServer: IPage<ITipocuenta>) => {
-          this.oPage = oPageFromServer;
-          this.arrBotonera = this.oBotoneraService.getBotonera(
-            this.nPage,
-            oPageFromServer.totalPages
-          );
-        },
-        error: (err) => {
-          console.log(err);
-        },
-      })
-    } else {
-    this.oTipoCuentaService
+    this.oTipoAsientoService
       .getPage(
         this.nPage,
         this.nRpp,
@@ -78,7 +61,7 @@ export class TipocuentaAdminSelectorUnroutedComponent implements OnInit {
         this.strFiltro
       )
       .subscribe({
-        next: (oPageFromServer: IPage<ITipocuenta>) => {
+        next: (oPageFromServer: IPage<ITipoasiento>) => {
           this.oPage = oPageFromServer;
           this.arrBotonera = this.oBotoneraService.getBotonera(
             this.nPage,
@@ -89,22 +72,14 @@ export class TipocuentaAdminSelectorUnroutedComponent implements OnInit {
           console.log(err);
         },
       });
-    }
   }
 
- 
+  select(oTipoAsiento: ITipoasiento) {
+    // estamos en ventana emergente: no navegar
+    // emitir el objeto seleccionado
 
-  select(oTipoCuenta: ITipocuenta) {
-    
-      // estamos en ventana emergente: no navegar
-      // emitir el objeto seleccionado
-
-      this.dialogRef.close(oTipoCuenta);
-
-
+    this.dialogRef.close(oTipoAsiento);
   }
-
-
 
   goToPage(p: number) {
     if (p) {
@@ -140,6 +115,6 @@ export class TipocuentaAdminSelectorUnroutedComponent implements OnInit {
   }
 
   filter(event: KeyboardEvent) {
-    this.debounceSubject.next(this.strFiltro);    
+    this.debounceSubject.next(this.strFiltro);
   }
 }

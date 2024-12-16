@@ -10,7 +10,7 @@ import { Observable } from 'rxjs/internal/Observable';
 })
 export class SubcuentaService {
 
-  serverURL: string = serverURL + '/subcuenta';
+  serverURL: string = serverURL + '/subcuenta'; 
 
   constructor(private oHttp: HttpClient) {}
 
@@ -75,5 +75,10 @@ export class SubcuentaService {
   delete(id: number) {
     return this.oHttp.delete('http://localhost:8085/subcuenta/' + id);
   }
+
+  countSubcuentaXTipocuenta(id: number): Observable<number> {
+    return this.oHttp.get<number>(this.serverURL + "/xtipocuenta/" + id);
+  }
+    
 
 }

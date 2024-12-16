@@ -65,14 +65,13 @@ export class UsuarioService {
 
   getOne(id: number): Observable<IUsuario> {
     let URL: string = '';
-    URL += 'http://localhost:8085';
-    URL += '/usuario';
+    URL += this.serverURL;
     URL += '/' + id;
     return this.oHttp.get<IUsuario>(URL);
   }
 
   delete(id: number) {
-    return this.oHttp.delete('http://localhost:8085/usuario/' + id);
+    return this.oHttp.delete(this.serverURL + '/' + id);
   }
 
   getApuntes(id: number): Observable<number> {

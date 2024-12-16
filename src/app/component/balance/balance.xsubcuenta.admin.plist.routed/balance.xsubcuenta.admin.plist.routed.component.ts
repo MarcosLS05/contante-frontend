@@ -138,3 +138,4 @@ export class BalanceXSubcuentaAdminPlistRoutedComponent implements OnInit {
     this.debounceSubject.next(this.strFiltro);
   }
 }
+

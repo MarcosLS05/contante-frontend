@@ -66,13 +66,65 @@ serverURL: string = serverURL + '/tipoCuenta';
 
   getOne(id: number): Observable<ITipocuenta> {
     let URL: string = '';
-    URL += 'http://localhost:8085';
-    URL += '/tipoCuenta';
+    URL += this.serverURL;
     URL += '/' + id;
     return this.oHttp.get<ITipocuenta>(URL);
   }
 
   delete(id: number) {
-    return this.oHttp.delete('http://localhost:8085/tipoCuenta/' + id);
+    return this.oHttp.delete(this.serverURL + '/' + id);
+  }
+
+  getPageSubcuenta(id: number){
+    return this.oHttp.get<number>(this.serverURL + "/subcuenta/" + id);
+  }
+
+
+  getXBalance(id: number): Observable<ITipocuenta> {
+    let URL: string = '';
+    URL += this.serverURL;
+    URL += '/xbalance/' + id;
+    return this.oHttp.get<ITipocuenta>(URL);
+  }
+
+
+  getPageXBalance(
+    page: number,
+    size: number,
+    id: number
+  ): Observable<IPage<ITipocuenta>> {
+    let URL: string = '';
+    URL += this.serverURL;
+    URL += '/xbalance/' + id;
+    if (!page) {
+      page = 0;
+    }
+    URL += '?page=' + page;
+    if (!size) {
+      size = 10;
+    }
+    URL += '&size=' + size;
+    
+    return this.oHttp.get<IPage<ITipocuenta>>(URL, httpOptions);
+  }
+
+  getPageXBalanceNoTiene(
+    page: number,
+    size: number,
+    id: number
+  ): Observable<IPage<ITipocuenta>> {
+    let URL: string = '';
+    URL += this.serverURL;
+    URL += '/xbalancenotiene/' + id;
+    if (!page) {
+      page = 0;
+    }
+    URL += '?page=' + page;
+    if (!size) {
+      size = 10;
+    }
+    URL += '&size=' + size;
+    
+    return this.oHttp.get<IPage<ITipocuenta>>(URL, httpOptions);
   }
 }

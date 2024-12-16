@@ -3,13 +3,14 @@
     <div class="col text-center">
       <h2 class="my-2">
         <i class="bi bi-list"></i>
-        Lista de tipoCuentas
-        <i class="bi bi-credit-card-fill"></i>
+        Lista de Tipos de Asientos del Balance {{ oBalance.id }}
+        <i class="bi bi-clipboard2-pulse"></i>
       </h2>
-      <a href="admin/tipoCuenta/create"><button class="btn btn-primary my-2 mx-2">
-          <i class="bi bi-plus-square"></i>
-          Crear nuevo tipoCuenta
-        </button></a>
+
+      <button class="btn btn-success my-2 mx-2" (click)="showTipoasientoSelectorModal()">
+        <i class="bi bi-plus-square"></i>
+        Agregar tipo de asiento a balance {{ oBalance.id }}
+      </button>
 
       <div class="d-inline-flex mx-2">
         <input type="text" class="form-control" placeholder="Buscar" (keyup)="filter($event)" [(ngModel)]="strFiltro" />
@@ -67,8 +68,8 @@
         <h5 class="text-muted">Sin filtrar</h5>
         }
         <h5 class="text-muted">
-          Mostrando {{ oPage?.numberOfElements | number : "1.0-0" }} de
-          {{ oPage?.totalElements | number : "1.0-0" }}
+          Mostrando {{ oPage?.numberOfElements | number : "1.0-0" }} de {{
+          oPage?.totalElements | number : "1.0-0" }}
         </h5>
       </div>
 
@@ -84,88 +85,34 @@
                 <i class="bi bi-caret-up-fill"></i>} }
               </th>
               <th (click)="sort('descripcion')" class="bg-primary text-white">
-                Descripcion @if (strField === 'descripcion') { @if (strDir ===
+                Descripción @if (strField === 'descripcion') { @if (strDir ===
                 'desc') {
                 <i class="bi bi-caret-down-fill"></i>
                 } @else {
                 <i class="bi bi-caret-up-fill"></i>} }
               </th>
-              <th (click)="sort('creditoodebito')" class="bg-primary text-white">
-                Crédito o débito @if (strField === 'creditoodebito') { @if
-                (strDir === 'desc') {
-                <i class="bi bi-caret-down-fill"></i>
-                } @else {
-                <i class="bi bi-caret-up-fill"></i>} }
-              </th>
-              <th (click)="sort('comentarios')" class="bg-primary text-white">
-                Comentarios @if (strField === 'comentarios') { @if (strDir ===
-                'desc') {
-                <i class="bi bi-caret-down-fill"></i>
-                } @else {
-                <i class="bi bi-caret-up-fill"></i>} }
-              </th>
-              <th (click)="sort('realonominal')" class="bg-primary text-white">
-                Real o nominal @if (strField === 'realonominal') { @if (strDir
-                === 'desc') {
-                <i class="bi bi-caret-down-fill"></i>
-                } @else {
-                <i class="bi bi-caret-up-fill"></i>} }
-              </th>
-              <th class="bg-primary text-white">Cuentas</th>
               <th class="bg-primary text-white">Balances</th>
-              <th class="bg-primary text-white">Subcuentas</th>
+              <th class="bg-primary text-white">Asientos</th>
               <th class="bg-warning text-black">Acciones</th>
             </tr>
           </thead>
 
           <tbody>
-            @for (tipoCuenta of oPage?.content; track tipoCuenta.id; let index = $index) {
+            @for (tipoAsiento of oPage?.content; track tipoAsiento.id) {
             <tr>
-              <td class="text-center">{{ tipoCuenta.id }}</td>
+              <td class="text-center">{{ tipoAsiento.id }}</td>
               <td class="text-start">
-                {{ tipoCuenta.descripcion | trim : 25 }}
+                {{ tipoAsiento.descripcion | trim : 50 }}
               </td>
               <td class="text-center">
-                @if(tipoCuenta.creditoodebito === 0){
-                <span class="badge text-bg-danger">CREDITO</span>
-                } @else {
-                <span class="badge text-bg-success">DEBITO</span>
-                }
+                {{ tipoAsiento.grupotipoasientos }}
               </td>
-              <td class="text-start">
-                {{ tipoCuenta.comentarios | trim : 10 }}
+              <td>
+                {{tipoAsiento.asientos}}
               </td>
-              <td class="text-center">
-                @if(tipoCuenta.realonominal === 0){
-                <span class="badge text-bg-warning">REAL</span>
-                } @else {
-                <span class="badge text-bg-info">NOMINAL</span>
-                }
-              </td>
-              <td class="text-center">
-                <a href="admin/cuenta/plist/xtipocuenta/{{ tipoCuenta.id }}" class="btn btn-primary">{{
-                  tipoCuenta.cuentas }}</a>
-              </td>
-
-              <td class="text-center">
-                <a href="admin/balance/plist/xtipocuenta/{{ tipoCuenta.id }}" class="btn btn-primary">
-                  {{ tipoCuenta.grupotipocuentas }}
-                </a>
-              </td>
-
-              <td class="text-center">
-                  {{arrNumSubcuentas[index]}}
-              </td>
-
               <td>
                 <div class="btn-group" role="group" aria-label="Basic example">
-                  <button type="button" class="btn btn-success" (click)="view(tipoCuenta)">
-                    <i class="bi bi-eye icon-15"></i>
-                  </button>
-                  <button type="button" class="btn btn-warning icon-15" (click)="edit(tipoCuenta)">
-                    <i class="bi bi-pen"></i>
-                  </button>
-                  <button type="button" class="btn btn-danger icon-15" (click)="remove(tipoCuenta)">
+                  <button type="button" class="btn btn-danger icon-15" (click)="quitar(tipoAsiento, oBalance)">
                     <i class="bi bi-trash"></i>
                   </button>
                 </div>
@@ -173,7 +120,7 @@
             </tr>
             } @empty {
             <tr>
-              <td colspan="11">No hay tipoCuentas</td>
+              <td colspan="3">No hay tipos de Asientos</td>
             </tr>
             }
           </tbody>

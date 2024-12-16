@@ -1,13 +1,16 @@
+import { ITipoapunte } from './../../../model/tipoapunte.interface';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IPage } from '../../../model/model.interface';
 import { FormsModule } from '@angular/forms';
 import { BotoneraService } from '../../../service/botonera.service';
 import { debounceTime, Subject } from 'rxjs';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TrimPipe } from '../../../pipe/trim.pipe';
 import { ITipocuenta } from '../../../model/tipocuenta.interface';
 import { TipoCuentaService } from '../../../service/tipoCuenta.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { SubcuentaService } from '../../../service/subcuenta.service';
 
 @Component({
   selector: 'app-tipocuenta-admin-routed',
@@ -31,11 +34,17 @@ export class TipocuentaAdminPlistRoutedComponent implements OnInit {
   arrBotonera: string[] = [];
   //
   private debounceSubject = new Subject<string>();
+  oTipocuenta: ITipocuenta = {} as ITipocuenta;
+  numeroSubcuentas: number = 0;
+  id: number = 0;
+  arrNumSubcuentas: Number[] = [];
 
   constructor(
     private oTipoCuentaService: TipoCuentaService,
     private oBotoneraService: BotoneraService,
-    private oRouter: Router
+    private oRouter: Router,
+    private oActivatedRoute: ActivatedRoute,
+    private oSubcuentaService: SubcuentaService
   ) {
     this.debounceSubject.pipe(debounceTime(10)).subscribe((value) => {
       this.getPage();
@@ -44,6 +53,15 @@ export class TipocuentaAdminPlistRoutedComponent implements OnInit {
 
   ngOnInit() {
     this.getPage();
+  }
+
+  getOne() {
+    this.oTipoCuentaService.getOne(this.id).subscribe({
+      next: (data: ITipocuenta) => {
+        this.oTipocuenta = data;
+
+      },
+    });
   }
 
   getPage() {
@@ -62,6 +80,18 @@ export class TipocuentaAdminPlistRoutedComponent implements OnInit {
             this.nPage,
             oPageFromServer.totalPages
           );
+
+          this.arrNumSubcuentas = [];
+          oPageFromServer.content.forEach(element => {
+            this.oSubcuentaService.countSubcuentaXTipocuenta(element.id).subscribe({
+              next: (data: number) => {
+                // add to array                
+                this.arrNumSubcuentas.push(data);
+              }
+            })
+
+          });
+
         },
         error: (err) => {
           console.log(err);
@@ -119,4 +149,16 @@ export class TipocuentaAdminPlistRoutedComponent implements OnInit {
   filter(event: KeyboardEvent) {
     this.debounceSubject.next(this.strFiltro);
   }
+
+  getPageSubcuenta(id: number) {
+    this.oTipoCuentaService.getPageSubcuenta(id).subscribe({
+      next: (data: number) => {
+        this.numeroSubcuentas = data;
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error(error);
+      }
+    });
+  }
+
 }

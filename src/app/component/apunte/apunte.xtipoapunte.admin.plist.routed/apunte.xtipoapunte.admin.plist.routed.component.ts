@@ -151,4 +151,6 @@ export class ApunteXTipoapunteAdminPlistRoutedComponent implements OnInit {
   filter(event: KeyboardEvent) {
     this.debounceSubject.next(this.strFiltro);
   }
+
 }
+

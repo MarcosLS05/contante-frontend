@@ -158,6 +158,8 @@ export class CuentaAdminCreateRoutedComponent implements OnInit {
       maxHeight: '1200px',
       width: '80%',
       maxWidth: '90%',
+      data: { origen: '', idBalance: '' },
+
 
     });
 
